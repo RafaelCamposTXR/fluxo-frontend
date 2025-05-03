@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { PrioridadeTarefaEnum } from '@shared/enums/prioridade-tarefa.enum';
 
 interface Task {
   id: number;
   title: string;
   description: string;
   status: 'todo' | 'doing' | 'done';
-  priority: 'low' | 'medium' | 'high';
+  priority: PrioridadeTarefaEnum;
   createdAt: Date;
 }
 
@@ -18,26 +19,26 @@ export class TaskBoardComponent {
   tasks: Task[] = [
     {
       id: 1,
-      title: 'Implementar Autenticação',
-      description: 'Desenvolver sistema de login e registro de usuários',
+      title: 'Implementar autenticação',
+      description: 'Adicionar sistema de login com JWT',
       status: 'todo',
-      priority: 'high',
+      priority: PrioridadeTarefaEnum.ALTA,
       createdAt: new Date()
     },
     {
       id: 2,
-      title: 'Design do Dashboard',
-      description: 'Criar layout responsivo para o dashboard principal',
+      title: 'Criar componentes base',
+      description: 'Desenvolver componentes reutilizáveis',
       status: 'doing',
-      priority: 'medium',
+      priority: PrioridadeTarefaEnum.MEDIA,
       createdAt: new Date()
     },
     {
       id: 3,
-      title: 'Configurar CI/CD',
-      description: 'Implementar pipeline de integração contínua',
+      title: 'Configurar ambiente',
+      description: 'Preparar ambiente de desenvolvimento',
       status: 'done',
-      priority: 'high',
+      priority: PrioridadeTarefaEnum.BAIXA,
       createdAt: new Date()
     }
   ];
@@ -61,7 +62,7 @@ export class TaskBoardComponent {
     }
   }
 
-  getPriorityClass(priority: string): string {
-    return `priority-${priority}`;
+  getPriorityClass(priority: PrioridadeTarefaEnum): string {
+    return `${priority}`;
   }
 }

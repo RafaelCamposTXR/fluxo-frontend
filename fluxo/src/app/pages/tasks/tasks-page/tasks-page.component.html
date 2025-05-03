@@ -3,11 +3,9 @@
     <h1>Gerenciamento de Tarefas</h1>
     <button class="add-task-btn">Nova Tarefa</button>
   </header>
-
-  <app-task-board>
-    <div class="tasks-container">
+  <div class="tasks-container">
+    <app-task-board>
       <h1>Lista de Tarefas</h1>
-
       <div class="task-list">
         <div class="task" *ngFor="let task of tasks">
           <div class="task-details">
@@ -25,6 +23,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </app-task-board>
+    </app-task-board>
+  </div>
 </div>
