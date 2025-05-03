@@ -1,0 +1,13 @@
+@import './styles/colors';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  background-color: $background;
+  padding: 5.5rem 1rem 0 1rem;
+}

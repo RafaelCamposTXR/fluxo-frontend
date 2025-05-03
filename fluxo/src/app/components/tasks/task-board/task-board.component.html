@@ -1,25 +1,33 @@
 <div class="task-board">
-  <app-task-column
-    #column1
-    [title]="'A Fazer'"
-    [tasks]="getTodoTasks()"
-    [type]="'todo'"
-    (moveTaskEvent)="moveTask($event.task, $event.status)">
-  </app-task-column>
+  <div class="board-header">
+    <h2>board-teste</h2>
+    <button class="board-action" title="Ver Participantes">
+      <i class="fas fa-users"></i>
+    </button>
+  </div>
+  <div class="board-content">
+    <app-task-column
+      #column1
+      [title]="'A Fazer'"
+      [tasks]="getTodoTasks()"
+      [type]="'todo'"
+      (moveTaskEvent)="moveTask($event.task, $event.status)">
+    </app-task-column>
 
-  <app-task-column
-    #column2
-    [title]="'Em Execução'"
-    [tasks]="getDoingTasks()"
-    [type]="'doing'"
-    (moveTaskEvent)="moveTask($event.task, $event.status)">
-  </app-task-column>
+    <app-task-column
+      #column2
+      [title]="'Em Execução'"
+      [tasks]="getDoingTasks()"
+      [type]="'doing'"
+      (moveTaskEvent)="moveTask($event.task, $event.status)">
+    </app-task-column>
 
-  <app-task-column
-    #column3
-    [title]="'Concluídas'"
-    [tasks]="getDoneTasks()"
-    [type]="'done'"
-    (moveTaskEvent)="moveTask($event.task, $event.status)">
-  </app-task-column>
+    <app-task-column
+      #column3
+      [title]="'Concluídas'"
+      [tasks]="getDoneTasks()"
+      [type]="'done'"
+      (moveTaskEvent)="moveTask($event.task, $event.status)">
+    </app-task-column>
+  </div>
 </div>

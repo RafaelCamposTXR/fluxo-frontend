@@ -1,0 +1,23 @@
+// Cores principais do tema
+$primary: #2196f3;   
+$secondary: #4caf50;  
+$accent: #ff9800;    
+
+// Gradientes
+$gradient-primary: linear-gradient(45deg, $primary, $secondary);
+
+// Cores de fundo
+$background: #374f8d; 
+$surface: #ffffff;    
+$surface-transparent: #24247313;   
+$surface-light: #f5f5f5;  
+$board-background: #e0e4e6;
+
+// Cores de texto
+$text-primary: #2c3e50;   
+$text-secondary: #666666;  
+
+// Cores de estado
+$success: $secondary;
+$warning: $accent;
+$error: #f44336;

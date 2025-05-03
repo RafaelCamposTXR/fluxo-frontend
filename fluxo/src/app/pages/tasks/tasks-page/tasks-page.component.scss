@@ -1,82 +1,14 @@
+@import '../../../styles/colors';
+
 .tasks-container {
   padding: 2rem 2rem;
-  background-color: #f9f9f9;
+  background-color: $background;
   border-radius: 8px;
 }
 
-.task-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.task {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-.task h2 {
-  margin: 0;
-  color: #333;
-}
-
-.task p {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #666;
-}
-
-.task-actions {
-  margin-top: 10px;
-}
-
-button {
-  padding: 8px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
 .tasks-page {
-  padding: 1rem;
+  padding: 2rem 3rem;
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding: 0.4rem 1rem;
-
-  h1 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: #333;
-  }
-}
-
-.add-task-btn {
-  padding: 0.75rem 1.5rem;
-  background-color: #2196f3;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #1976d2;
-  }
 }

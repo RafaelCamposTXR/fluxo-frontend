@@ -1,0 +1,84 @@
+@import '../../../styles/colors';
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2.5rem;
+  height: 5.8rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: $surface-transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Inter', sans-serif;
+
+  .logo {
+    h1 {
+      margin: 0;
+      font-size: 3.4rem;
+      font-weight: 800;
+      cursor: pointer;
+      background: $gradient-primary;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.1rem;
+      transform: scaleX(1.05);
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05) scaleX(1.05);
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.55rem;
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.4rem;
+      height: 2.4rem;
+      border: none;
+      border-radius: 50%;
+      color: $surface;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      i {
+        font-size: 1.1rem;
+      }
+
+      &:hover {
+        filter: brightness(85%);
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+        filter: brightness(75%);
+      }
+
+      // Botão Nova Tarefa
+      &:nth-child(1) {
+        background: #4CAF50;
+      }
+
+      // Botão Perfil
+      &:nth-child(2) {
+        background: #FFB74D;
+      }
+
+      // Botão Sair
+      &:nth-child(3) {
+        background: #EF5350;
+      }
+    }
+  }
+}
