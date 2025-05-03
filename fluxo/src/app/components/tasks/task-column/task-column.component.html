@@ -3,26 +3,24 @@
     <h2>{{ title }}</h2>
     <span class="task-count">{{ tasks.length }}</span>
   </div>
+
   <div class="tasks-container">
-    <div *ngFor="let task of tasks" 
-         class="task-card"
-         [ngClass]="getPriorityClass(task.priority)">
+    <div *ngFor="let task of tasks" class="task-card" [ngClass]="getTaskClasses(task)">
       <h3>{{ task.title }}</h3>
       <p>{{ task.description }}</p>
       <div class="task-footer">
-        <span class="priority">{{ task.priority }}</span>
+        <span class="priority" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
         <div class="actions">
           <ng-container [ngSwitch]="type">
-            <ng-container *ngSwitchCase="'todo'">
-              <button (click)="moveTask(task, 'doing')">Iniciar</button>
-            </ng-container>
-            <ng-container *ngSwitchCase="'doing'">
-              <button (click)="moveTask(task, 'todo')">Voltar</button>
-              <button (click)="moveTask(task, 'done')">Concluir</button>
-            </ng-container>
-            <ng-container *ngSwitchCase="'done'">
-              <button (click)="moveTask(task, 'doing')">Reabrir</button>
-            </ng-container>
+            <button *ngSwitchCase="'todo'" (click)="moveTask(task, 'doing')">
+              Iniciar
+            </button>
+            <button *ngSwitchCase="'doing'" (click)="moveTask(task, 'done')">
+              Concluir
+            </button>
+            <button *ngSwitchCase="'done'" (click)="moveTask(task, 'todo')">
+              Reabrir
+            </button>
           </ng-container>
         </div>
       </div>

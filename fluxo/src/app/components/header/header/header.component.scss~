@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2.5rem;
-  height: 5.8rem;
+  height: 5rem;
   position: fixed;
   top: 0;
   width: 100%;
@@ -17,35 +17,36 @@
   .logo {
     h1 {
       margin: 0;
-      font-size: 2.7rem;
+      font-size: 2.8rem;
       font-weight: 800;
+      cursor: pointer;
       background: $gradient-primary;
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: -0.1rem;
+      transform: scaleX(1.05);
       transition: transform 0.3s ease;
 
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.05) scaleX(1.05);
       }
     }
   }
 
   .actions {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
 
     .action-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 2.3rem;
-      height: 2.3rem;
+      width: 2.15rem;
+      height: 2.15rem;
       border: none;
       border-radius: 50%;
-      background: $surface-light;
-      color: $text-secondary;
+      color: $surface;
       font-size: 1rem;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -55,13 +56,28 @@
       }
 
       &:hover {
-        background: $primary;
-        color: $surface;
+        filter: brightness(85%);
         transform: translateY(-1px);
       }
 
       &:active {
         transform: translateY(0);
+        filter: brightness(75%);
+      }
+
+      // Botão Nova Tarefa
+      &:nth-child(1) {
+        background: #4CAF50;
+      }
+
+      // Botão Perfil
+      &:nth-child(2) {
+        background: #FFB74D;
+      }
+
+      // Botão Sair
+      &:nth-child(3) {
+        background: #EF5350;
       }
     }
   }
