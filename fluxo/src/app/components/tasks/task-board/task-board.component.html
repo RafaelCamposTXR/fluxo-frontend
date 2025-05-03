@@ -1,0 +1,65 @@
+<div class="task-board">
+  <div class="board-column">
+    <div class="column-header todo">
+      <h2>A Fazer</h2>
+      <span class="task-count">{{ getTodoTasks().length }}</span>
+    </div>
+    <div class="tasks-container">
+      <div *ngFor="let task of getTodoTasks()" 
+           class="task-card" 
+           [ngClass]="getPriorityClass(task.priority)">
+        <h3>{{ task.title }}</h3>
+        <p>{{ task.description }}</p>
+        <div class="task-footer">
+          <span class="priority">{{ task.priority }}</span>
+          <div class="actions">
+            <button (click)="moveTask(task, 'doing')">Iniciar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="board-column">
+    <div class="column-header doing">
+      <h2>Em Execução</h2>
+      <span class="task-count">{{ getDoingTasks().length }}</span>
+    </div>
+    <div class="tasks-container">
+      <div *ngFor="let task of getDoingTasks()" 
+           class="task-card"
+           [ngClass]="getPriorityClass(task.priority)">
+        <h3>{{ task.title }}</h3>
+        <p>{{ task.description }}</p>
+        <div class="task-footer">
+          <span class="priority">{{ task.priority }}</span>
+          <div class="actions">
+            <button (click)="moveTask(task, 'todo')">Voltar</button>
+            <button (click)="moveTask(task, 'done')">Concluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="board-column">
+    <div class="column-header done">
+      <h2>Concluídas</h2>
+      <span class="task-count">{{ getDoneTasks().length }}</span>
+    </div>
+    <div class="tasks-container">
+      <div *ngFor="let task of getDoneTasks()" 
+           class="task-card"
+           [ngClass]="getPriorityClass(task.priority)">
+        <h3>{{ task.title }}</h3>
+        <p>{{ task.description }}</p>
+        <div class="task-footer">
+          <span class="priority">{{ task.priority }}</span>
+          <div class="actions">
+            <button (click)="moveTask(task, 'doing')">Reabrir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
