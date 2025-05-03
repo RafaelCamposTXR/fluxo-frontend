@@ -4,7 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "ng serve",
+    "start:debug": "ng serve --configuration=development"
   },
   "dependencies": {
     "@angular/cli": "^15.0.0"
