@@ -4,6 +4,7 @@ import { TaskService } from '../../../core/services/task.service';
 import { Task } from '../../../core/models/task.model';
 import { ToasterService } from '../../../shared/services/toaster.service';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { OfflineSyncService } from '../../../core/services/offline-sync.service';
 import confetti from 'canvas-confetti';
 
 @Component({
@@ -45,7 +46,8 @@ export class TaskBoardComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private toasterService: ToasterService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private offlineSyncService: OfflineSyncService
   ) {}
 
   ngOnInit() {
@@ -107,7 +109,12 @@ export class TaskBoardComponent implements OnInit {
 
         const taskIndex = this.tasks.findIndex(t => t.id === task.id);
         if (taskIndex !== -1) {
-          this.tasks[taskIndex] = { ...task, status: newStatus };
+          // Atualiza localmente
+          const updatedTask = { ...task, status: newStatus };
+          this.tasks[taskIndex] = updatedTask;
+
+          // Adiciona à fila de sincronização
+          this.offlineSyncService.addPendingChange(task, newStatus);
 
           if (newStatus === 'done' && task.status !== 'done') {
             this.triggerSuccessAnimation();
