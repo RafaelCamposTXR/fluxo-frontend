@@ -10,6 +10,7 @@ import { TaskBoardComponent } from './components/tasks/task-board/task-board.com
 import { TaskColumnComponent } from './components/tasks/task-column/task-column.component';
 import { HeaderComponent } from './components/header/header/header.component';
 import { ToasterComponent } from './shared/components/toaster/toaster.component';
+import { LoadingComponent } from './shared/components/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ToasterComponent } from './shared/components/toaster/toaster.component'
     TaskBoardComponent,
     TaskColumnComponent,
     HeaderComponent,
-    ToasterComponent
+    ToasterComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

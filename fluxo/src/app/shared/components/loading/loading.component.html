@@ -1,0 +1,4 @@
+<div class="loading-container" *ngIf="loadingService.isLoading$ | async">
+  <div class="spinner"></div>
+  <span class="loading-text">{{ loadingService.message$ | async }}</span>
+</div>

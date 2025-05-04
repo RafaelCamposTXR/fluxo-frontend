@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PrioridadeTarefaEnum } from '@shared/enums/prioridade-tarefa.enum';
-import { TaskService } from '@core/services/task.service';
-import { Task } from '@core/models/task.model';
-import { ToasterService } from '@shared/services/toaster.service';
+import { PrioridadeTarefaEnum } from '../../../shared/enums/prioridade-tarefa.enum';
+import { TaskService } from '../../../core/services/task.service';
+import { Task } from '../../../core/models/task.model';
+import { ToasterService } from '../../../shared/services/toaster.service';
+import { LoadingService } from '../../../shared/services/loading.service';
 import confetti from 'canvas-confetti';
 
 @Component({
@@ -43,7 +44,8 @@ export class TaskBoardComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private toasterService: ToasterService
+    private toasterService: ToasterService,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
@@ -79,11 +81,14 @@ export class TaskBoardComponent implements OnInit {
   }
 
   moveTask(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
+    this.loadingService.show('Movendo tarefa...');
+
     this.taskService.moveTask({
       tarefa: task.nome,
       novo_status: newStatus
     }).subscribe(
       (updatedTask: Task) => {
+        this.loadingService.hide();
         const taskIndex = this.tasks.findIndex(t => t.id === task.id);
         if (taskIndex !== -1) {
           this.tasks[taskIndex] = updatedTask;
@@ -96,6 +101,7 @@ export class TaskBoardComponent implements OnInit {
       },
       error => {
         // Em caso de erro na API, atualiza localmente
+        this.loadingService.hide();
         console.error('Erro ao mover tarefa:', error);
         this.toasterService.show('Erro de conexão. Mudanças sendo salvas localmente.', 'warning');
 
