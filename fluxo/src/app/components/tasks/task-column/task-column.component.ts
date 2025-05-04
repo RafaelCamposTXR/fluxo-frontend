@@ -1,14 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PrioridadeTarefaEnum } from '@shared/enums/prioridade-tarefa.enum';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: 'todo' | 'doing' | 'done';
-  priority: PrioridadeTarefaEnum;
-  createdAt: Date;
-}
+import { Task } from '@core/models/task.model';
 
 @Component({
   selector: 'app-task-column',
@@ -25,7 +17,7 @@ export class TaskColumnComponent {
   statusChangedTaskIds: Set<number> = new Set();
 
   getPriorityClass(priority: PrioridadeTarefaEnum): string {
-    return `priority-${priority}`;
+    return `${priority}`;
   }
 
   moveTask(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
@@ -50,7 +42,7 @@ export class TaskColumnComponent {
   }
 
   getTaskClasses(task: Task): string {
-    const classes = [`priority-${task.priority}`];
+    const classes = [`${task.prioridade}`];
     
     if (this.completedTaskIds.has(task.id)) {
       classes.push('entering-done');

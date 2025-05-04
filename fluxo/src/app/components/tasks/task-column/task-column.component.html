@@ -1,15 +1,15 @@
 <div class="board-column">
   <div class="column-header" [ngClass]="type">
-    <h2>{{ title }}</h2>
+  <h2>{{ title }}</h2>
     <span class="task-count">{{ tasks.length }}</span>
   </div>
 
   <div class="tasks-container">
     <div *ngFor="let task of tasks" class="task-card" [ngClass]="getTaskClasses(task)">
-      <h3>{{ task.title }}</h3>
-      <p>{{ task.description }}</p>
+      <h3>{{ task.nome }}</h3>
+      <p>{{ task.descricao }}</p>
       <div class="task-footer">
-        <span class="priority" [ngClass]="getPriorityClass(task.priority)">{{ task.priority }}</span>
+        <span class="priority" [ngClass]="getPriorityClass(task.prioridade)">{{ task.prioridade }}</span>
         <div class="actions">
           <ng-container [ngSwitch]="type">
             <button *ngSwitchCase="'todo'" (click)="moveTask(task, 'doing')">

@@ -1,17 +1,20 @@
+import { PrioridadeTarefaEnum } from '@shared/enums/prioridade-tarefa.enum';
+
 export interface Task {
+    id: number;
     nome: string;
     descricao?: string;
     status: string;
     data_criacao?: string;
     data_conclusao?: string;
-    prioridade?: number;
+    prioridade: PrioridadeTarefaEnum;
 }
 
 export interface TaskFilter {
     status?: string;
     data_inicio?: string;
     data_fim?: string;
-    prioridade?: number;
+    prioridade?: PrioridadeTarefaEnum;
 }
 
 export interface MoveTask {
@@ -23,6 +26,6 @@ export interface PatchTask {
     nome?: string;
     descricao?: string;
     status?: string;
-    prioridade?: number;
+    prioridade?: PrioridadeTarefaEnum;
     data_conclusao?: string;
 }

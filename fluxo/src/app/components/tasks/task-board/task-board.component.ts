@@ -1,50 +1,70 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PrioridadeTarefaEnum } from '@shared/enums/prioridade-tarefa.enum';
+import { TaskService } from '@core/services/task.service';
+import { Task } from '@core/models/task.model';
+import { ToasterService } from '@shared/services/toaster.service';
 import confetti from 'canvas-confetti';
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: 'todo' | 'doing' | 'done';
-  priority: PrioridadeTarefaEnum;
-  createdAt: Date;
-}
 
 @Component({
   selector: 'app-task-board',
   templateUrl: './task-board.component.html',
   styleUrls: ['./task-board.component.scss']
 })
-export class TaskBoardComponent {
-  @Input() boardName: string = 'Meu Board';
+export class TaskBoardComponent implements OnInit {
+  @Input() boardName: string = '';
+  tasks: Task[] = [];
 
-  tasks: Task[] = [
+  private mockTasks: Task[] = [
     {
       id: 1,
-      title: 'Implementar autenticação',
-      description: 'Adicionar sistema de login com JWT',
+      nome: 'Implementar autenticação',
+      descricao: 'Adicionar sistema de login com JWT',
       status: 'todo',
-      priority: PrioridadeTarefaEnum.ALTA,
-      createdAt: new Date()
+      prioridade: PrioridadeTarefaEnum.ALTA,
+      data_criacao: new Date().toISOString()
     },
     {
       id: 2,
-      title: 'Criar componentes base',
-      description: 'Desenvolver componentes reutilizáveis',
+      nome: 'Criar componentes base',
+      descricao: 'Desenvolver componentes reutilizáveis',
       status: 'doing',
-      priority: PrioridadeTarefaEnum.MEDIA,
-      createdAt: new Date()
+      prioridade: PrioridadeTarefaEnum.MEDIA,
+      data_criacao: new Date().toISOString()
     },
     {
       id: 3,
-      title: 'Configurar ambiente',
-      description: 'Preparar ambiente de desenvolvimento',
+      nome: 'Configurar ambiente',
+      descricao: 'Preparar ambiente de desenvolvimento',
       status: 'done',
-      priority: PrioridadeTarefaEnum.BAIXA,
-      createdAt: new Date()
+      prioridade: PrioridadeTarefaEnum.BAIXA,
+      data_criacao: new Date().toISOString()
     }
   ];
+
+  constructor(
+    private taskService: TaskService,
+    private toasterService: ToasterService
+  ) {}
+
+  ngOnInit() {
+    this.loadTasks();
+  }
+
+  loadTasks() {
+    debugger;
+    this.taskService.getTasks({}).subscribe(
+      (tasks: Task[]) => {
+        // Se não houver tarefas do backend, usa o mock
+        debugger;
+        this.tasks = tasks.length > 0 ? tasks : this.mockTasks;
+      },
+      error => {
+        // Em caso de erro na API, usa o mock
+        console.error('Erro ao carregar tarefas:', error);
+        this.tasks = this.mockTasks;
+      }
+    );
+  }
 
   getTodoTasks(): Task[] {
     return this.tasks.filter(task => task.status === 'todo');
@@ -59,16 +79,36 @@ export class TaskBoardComponent {
   }
 
   moveTask(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
-    const taskIndex = this.tasks.findIndex(t => t.id === task.id);
-    if (taskIndex !== -1) {
-      const oldStatus = this.tasks[taskIndex].status;
-      this.tasks[taskIndex].status = newStatus;
+    this.taskService.moveTask({
+      tarefa: task.nome,
+      novo_status: newStatus
+    }).subscribe(
+      (updatedTask: Task) => {
+        const taskIndex = this.tasks.findIndex(t => t.id === task.id);
+        if (taskIndex !== -1) {
+          this.tasks[taskIndex] = updatedTask;
 
-      // Se a tarefa foi movida para 'done', dispara o confete
-      if (newStatus === 'done' && oldStatus !== 'done') {
-        this.triggerSuccessAnimation();
+          // Se a tarefa foi movida para 'done', dispara o confete
+          if (newStatus === 'done' && task.status !== 'done') {
+            this.triggerSuccessAnimation();
+          }
+        }
+      },
+      error => {
+        // Em caso de erro na API, atualiza localmente
+        console.error('Erro ao mover tarefa:', error);
+        this.toasterService.show('Erro de conexão. Mudanças sendo salvas localmente.', 'warning');
+
+        const taskIndex = this.tasks.findIndex(t => t.id === task.id);
+        if (taskIndex !== -1) {
+          this.tasks[taskIndex] = { ...task, status: newStatus };
+
+          if (newStatus === 'done' && task.status !== 'done') {
+            this.triggerSuccessAnimation();
+          }
+        }
       }
-    }
+    );
   }
 
   private triggerSuccessAnimation(): void {
@@ -82,6 +122,7 @@ export class TaskBoardComponent {
     }
 
     // Cria uma animação contínua de confete
+    // @ts-ignore
     const interval = setInterval(() => {
       const timeLeft = animationEnd - Date.now();
 
