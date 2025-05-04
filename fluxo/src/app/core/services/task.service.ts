@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
 import { Task, TaskFilter, MoveTask, PatchTask } from '../models/task.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService extends BaseHttpService {
-  constructor(http: HttpClient) {
-    super(http);
+  constructor(http: HttpClient, authService: AuthService) {
+    super(http, authService);
   }
 
   getTasks(filter: TaskFilter): Observable<Task[]> {
