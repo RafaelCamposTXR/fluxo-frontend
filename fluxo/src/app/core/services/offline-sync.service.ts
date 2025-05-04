@@ -20,7 +20,7 @@ interface PendingChange {
 export class OfflineSyncService {
   private readonly STORAGE_KEY = 'pending_task_changes';
   private readonly MAX_RETRIES = 6;
-  private readonly RETRY_INTERVAL = 10000; // 10 segundos
+  private readonly RETRY_INTERVAL = 10000; 
 
   private pendingChanges = new BehaviorSubject<PendingChange[]>(this.loadPendingChanges());
   private isOnline = new BehaviorSubject<boolean>(navigator.onLine);
@@ -107,10 +107,10 @@ export class OfflineSyncService {
         
         // Se excedeu o número máximo de tentativas, remove da fila
         if (change.retryCount >= this.MAX_RETRIES) {
-          this.toasterService.show(
-            `Não foi possível sincronizar a tarefa "${change.taskName}" com o servidor. Contate o time de tecnologia`,
-            'error'
-          );
+          // this.toasterService.show(
+          //   `Não foi possível sincronizar a tarefa "${change.taskName}" com o servidor. Se persistir, contate o time de tecnologia`,
+          //   'error'
+          // );
         }
       }
     }

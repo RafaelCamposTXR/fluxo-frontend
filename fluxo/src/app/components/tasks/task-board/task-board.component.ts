@@ -83,43 +83,38 @@ export class TaskBoardComponent implements OnInit {
   }
 
   moveTask(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
-    this.loadingService.show('Movendo tarefa...');
+    // Atualiza localmente primeiro
+    const taskIndex = this.tasks.findIndex(t => t.id === task.id);
+    if (taskIndex === -1) return;
 
+    const originalTask = { ...task };
+    const updatedTask = { ...task, status: newStatus };
+    this.tasks[taskIndex] = updatedTask;
+
+    // Dispara confete se moveu para done
+    if (newStatus === 'done' && task.status !== 'done') {
+      this.triggerSuccessAnimation();
+    }
+
+    // Tenta sincronizar com o backend
+    this.loadingService.show('Sincronizando...');
+    
     this.taskService.moveTask({
       tarefa: task.nome,
       novo_status: newStatus
     }).subscribe(
-      (updatedTask: Task) => {
+      (serverTask: Task) => {
         this.loadingService.hide();
-        const taskIndex = this.tasks.findIndex(t => t.id === task.id);
-        if (taskIndex !== -1) {
-          this.tasks[taskIndex] = updatedTask;
-
-          // Se a tarefa foi movida para 'done', dispara o confete
-          if (newStatus === 'done' && task.status !== 'done') {
-            this.triggerSuccessAnimation();
-          }
-        }
+        // Atualiza com dados do servidor
+        this.tasks[taskIndex] = serverTask;
       },
       error => {
-        // Em caso de erro na API, atualiza localmente
         this.loadingService.hide();
-        console.error('Erro ao mover tarefa:', error);
-        this.toasterService.show('Erro de conexão. Mudanças sendo salvas localmente.', 'warning');
-
-        const taskIndex = this.tasks.findIndex(t => t.id === task.id);
-        if (taskIndex !== -1) {
-          // Atualiza localmente
-          const updatedTask = { ...task, status: newStatus };
-          this.tasks[taskIndex] = updatedTask;
-
-          // Adiciona à fila de sincronização
-          this.offlineSyncService.addPendingChange(task, newStatus);
-
-          if (newStatus === 'done' && task.status !== 'done') {
-            this.triggerSuccessAnimation();
-          }
-        }
+        console.error('Erro ao sincronizar tarefa:', error);
+        this.toasterService.show('Erro de conexão. Mudanças serão sincronizadas quando possível.', 'warning');
+        
+        // Adiciona à fila de sincronização
+        this.offlineSyncService.addPendingChange(originalTask, newStatus);
       }
     );
   }
