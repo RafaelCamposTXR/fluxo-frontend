@@ -19,18 +19,18 @@ import { ToasterService, Toast } from '@shared/services/toaster.service';
   styles: [`
     .toaster-container {
       position: fixed;
-      bottom: 20px;
+      top: 20px;
       right: 20px;
       z-index: 1000;
     }
 
     .toast {
-      padding: 15px 20px;
-      margin-top: 10px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
       min-width: 200px;
-      border-radius: 4px;
+      border-radius: 15px;
       color: white;
-      font-size: 14px;
+      font-size: 12px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
@@ -52,19 +52,22 @@ import { ToasterService, Toast } from '@shared/services/toaster.service';
   `],
   animations: [
     trigger('toastAnimation', [
-      state('void', style({
-        transform: 'translateX(100%)',
-        opacity: 0
-      })),
       state('visible', style({
         transform: 'translateX(0)',
         opacity: 1
       })),
-      transition('void => visible', [
-        animate('200ms ease-out')
+      transition(':enter', [
+        style({
+          transform: 'translateX(100%)',
+          opacity: 0
+        }),
+        animate('300ms ease-out')
       ]),
-      transition('visible => void', [
-        animate('200ms ease-in')
+      transition(':leave', [
+        animate('300ms ease-in', style({
+          transform: 'translateX(100%)',
+          opacity: 0
+        }))
       ])
     ])
   ]

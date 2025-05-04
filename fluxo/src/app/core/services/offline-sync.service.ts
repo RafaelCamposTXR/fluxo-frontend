@@ -4,6 +4,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Task } from '../models/task.model';
 import { TaskService } from './task.service';
 import { ToasterService } from '@shared/services/toaster.service';
+import { LoadingService } from '@shared/services/loading.service';
 
 interface PendingChange {
   id: number;
@@ -28,7 +29,8 @@ export class OfflineSyncService {
 
   constructor(
     private taskService: TaskService,
-    private toasterService: ToasterService
+    private toasterService: ToasterService,
+    private loadingService: LoadingService
   ) {
     // Monitora mudanças na conexão
     merge(
@@ -101,6 +103,7 @@ export class OfflineSyncService {
         
         if (this.pendingChanges.value.length === 0) {
           this.toasterService.show('Todas as mudanças foram sincronizadas com sucesso!', 'success');
+          this.loadingService.hide();
         }
       } catch (error) {
         change.retryCount++;

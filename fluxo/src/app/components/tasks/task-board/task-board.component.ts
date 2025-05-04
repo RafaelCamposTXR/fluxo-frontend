@@ -109,9 +109,7 @@ export class TaskBoardComponent implements OnInit {
         this.tasks[taskIndex] = serverTask;
       },
       error => {
-        this.loadingService.hide();
-        console.error('Erro ao sincronizar tarefa:', error);
-        this.toasterService.show('Erro de conexão. Mudanças serão sincronizadas quando possível.', 'warning');
+        this.toasterService.show('Sem notícias do servidor. Te avisamos assim que a conexão voltar.', 'warning');
         
         // Adiciona à fila de sincronização
         this.offlineSyncService.addPendingChange(originalTask, newStatus);
