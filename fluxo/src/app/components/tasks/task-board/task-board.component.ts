@@ -51,7 +51,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
 
   loadTasks() {
     this.taskService.getTasks({
-      prioridade: undefined
+      ls_prioridade: undefined
     }).subscribe(
       (tasks: Task[]) => {
         this.tasks = tasks;
