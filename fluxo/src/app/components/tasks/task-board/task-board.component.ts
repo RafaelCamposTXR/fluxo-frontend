@@ -6,7 +6,8 @@ import { ToasterService } from '../../../shared/services/toaster.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { OfflineSyncService } from '../../../core/services/offline-sync.service';
 import { AlertWebsocketService } from '../../../shared/services/alert-websocket.service';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
+import { finalize, timeout, catchError } from 'rxjs/operators';
 import confetti from 'canvas-confetti';
 import {StatusTarefaEnum} from "@shared/enums/status-tarefa.enum";
 
@@ -79,6 +80,11 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
     const taskIndex = this.tasks.findIndex(t => t && t.id === task.id);
     if (taskIndex === -1) return;
 
+    // Timer para mostrar o loading apenas se demorar
+    const loadingTimer = timer(1000).subscribe(() => {
+      this.loadingService.show();
+    });
+
     // Cria uma cópia da tarefa original antes de qualquer modificação
     const originalTask = { ...this.tasks[taskIndex] };
     
@@ -94,13 +100,23 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
       this.triggerSuccessAnimation();
     }
 
-    // Envia para o servidor
+    // Tenta enviar para o servidor
     this.taskService.moveTask({
       tarefa: task.nome,
       novo_status: newStatus
-    }).subscribe(
-      (serverTask: Task) => {
-        // Atualiza com os dados do servidor
+    }).pipe(
+      timeout(3000), // Timeout após 3 segundos
+      catchError(error => {
+        this.loadingService.show(); // Mostra loading em caso de erro
+        throw error; // Re-throw para ser tratado no subscribe
+      }),
+      finalize(() => {
+        loadingTimer.unsubscribe(); // Cancela o timer do loading
+        this.loadingService.hide();
+      })
+    ).subscribe({
+      next: (serverTask: Task) => {
+        // Atualiza com os dados do servidor se necessário
         if (this.tasks[taskIndex]?.id === serverTask.id) {
           this.tasks[taskIndex] = serverTask;
         }
@@ -109,16 +125,12 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
           `Tarefa "${task.nome}" foi movida para ${this.getStatusLabel(newStatus)}`
         );
       },
-      error => {
-        // Reverte para o estado original em caso de erro
-        if (this.tasks[taskIndex]?.id === originalTask.id) {
-          this.tasks[taskIndex] = originalTask;
-        }
-        
-        this.toasterService.show('Sem notícias do servidor. Te avisamos assim que a conexão voltar.', 'warning');
-        this.offlineSyncService.addPendingChange(originalTask, newStatus);
+      error: error => {
+        // Mantém a alteração local e adiciona à fila de sincronização
+        this.toasterService.show('Sem notícias do servidor. A alteração será sincronizada quando a conexão voltar.', 'warning');
+        this.offlineSyncService.addPendingChange(updatedTask, newStatus);
       }
-    );
+    });
   }
 
   private getStatusLabel(status: StatusTarefaEnum): string {
