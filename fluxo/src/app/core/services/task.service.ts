@@ -23,6 +23,7 @@ export class TaskService extends BaseHttpService {
 
   moveTask(moveTask: MoveTask): Observable<Task> {
     return this.put<Task>('tarefas/move-tarefas', moveTask);
+
   }
 
   editTask(taskName: string, patch: PatchTask): Observable<Task> {

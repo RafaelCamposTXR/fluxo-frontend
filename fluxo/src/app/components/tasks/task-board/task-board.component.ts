@@ -16,32 +16,6 @@ export class TaskBoardComponent implements OnInit {
   @Input() boardName: string = '';
   tasks: Task[] = [];
 
-  private mockTasks: Task[] = [
-    {
-      id: 1,
-      nome: 'Implementar autenticação',
-      descricao: 'Adicionar sistema de login com JWT',
-      status: 'todo',
-      prioridade: PrioridadeTarefaEnum.ALTA,
-      data_criacao: new Date().toISOString()
-    },
-    {
-      id: 2,
-      nome: 'Criar componentes base',
-      descricao: 'Desenvolver componentes reutilizáveis',
-      status: 'doing',
-      prioridade: PrioridadeTarefaEnum.MEDIA,
-      data_criacao: new Date().toISOString()
-    },
-    {
-      id: 3,
-      nome: 'Configurar ambiente',
-      descricao: 'Preparar ambiente de desenvolvimento',
-      status: 'done',
-      prioridade: PrioridadeTarefaEnum.BAIXA,
-      data_criacao: new Date().toISOString()
-    }
-  ];
 
   constructor(
     private taskService: TaskService,
@@ -58,14 +32,11 @@ export class TaskBoardComponent implements OnInit {
     debugger;
     this.taskService.getTasks({}).subscribe(
       (tasks: Task[]) => {
-        // Se não houver tarefas do backend, usa o mock
         debugger;
-        this.tasks = tasks.length > 0 ? tasks : this.mockTasks;
+        this.tasks = tasks;
       },
       error => {
-        // Em caso de erro na API, usa o mock
         console.error('Erro ao carregar tarefas:', error);
-        this.tasks = this.mockTasks;
       }
     );
   }
@@ -83,7 +54,6 @@ export class TaskBoardComponent implements OnInit {
   }
 
   moveTask(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
-    // Atualiza localmente primeiro
     const taskIndex = this.tasks.findIndex(t => t.id === task.id);
     if (taskIndex === -1) return;
 
@@ -91,26 +61,21 @@ export class TaskBoardComponent implements OnInit {
     const updatedTask = { ...task, status: newStatus };
     this.tasks[taskIndex] = updatedTask;
 
-    // Dispara confete se moveu para done
     if (newStatus === 'done' && task.status !== 'done') {
       this.triggerSuccessAnimation();
     }
 
-    // Tenta sincronizar com o backend
-    this.loadingService.show('Sincronizando...');
-    
     this.taskService.moveTask({
       tarefa: task.nome,
       novo_status: newStatus
     }).subscribe(
+
       (serverTask: Task) => {
-        this.loadingService.hide();
-        // Atualiza com dados do servidor
         this.tasks[taskIndex] = serverTask;
       },
       error => {
         this.toasterService.show('Sem notícias do servidor. Te avisamos assim que a conexão voltar.', 'warning');
-        
+
         // Adiciona à fila de sincronização
         this.offlineSyncService.addPendingChange(originalTask, newStatus);
       }

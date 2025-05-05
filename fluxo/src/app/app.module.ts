@@ -12,6 +12,7 @@ import { HeaderComponent } from './components/header/header/header.component';
 import { ToasterComponent } from './shared/components/toaster/toaster.component';
 import { LoadingComponent } from './shared/components/loading/loading.component';
 import { LoginComponent } from './components/login/login.component';
+import { LoginPageComponent } from './pages/login/login-page/login-page.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { LoginComponent } from './components/login/login.component';
     ToasterComponent,
     LoadingComponent,
     LoginComponent,
+    LoginPageComponent,
   ],
   imports: [
     BrowserModule,

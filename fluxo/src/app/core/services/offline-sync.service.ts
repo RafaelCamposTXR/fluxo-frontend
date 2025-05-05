@@ -21,7 +21,7 @@ interface PendingChange {
 export class OfflineSyncService {
   private readonly STORAGE_KEY = 'pending_task_changes';
   private readonly MAX_RETRIES = 6;
-  private readonly RETRY_INTERVAL = 10000; 
+  private readonly RETRY_INTERVAL = 10000;
 
   private pendingChanges = new BehaviorSubject<PendingChange[]>(this.loadPendingChanges());
   private isOnline = new BehaviorSubject<boolean>(navigator.onLine);
@@ -62,10 +62,10 @@ export class OfflineSyncService {
   // Adiciona uma mudança à fila de sincronização
   addPendingChange(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
     const changes = this.pendingChanges.value;
-    
+
     // Remove mudança anterior da mesma tarefa se existir
     const filteredChanges = changes.filter(c => c.taskId !== task.id);
-    
+
     const newChange: PendingChange = {
       id: Date.now(),
       taskId: task.id,
@@ -100,14 +100,14 @@ export class OfflineSyncService {
 
         // Sucesso: remove a mudança da fila
         this.removePendingChange(change.id);
-        
+
         if (this.pendingChanges.value.length === 0) {
           this.toasterService.show('Todas as mudanças foram sincronizadas com sucesso!', 'success');
           this.loadingService.hide();
         }
       } catch (error) {
         change.retryCount++;
-        
+
         // Se excedeu o número máximo de tentativas, remove da fila
         if (change.retryCount >= this.MAX_RETRIES) {
           // this.toasterService.show(
@@ -129,14 +129,10 @@ export class OfflineSyncService {
   }
 
   private loadPendingChanges(): PendingChange[] {
+    return [];
     const stored = localStorage.getItem(this.STORAGE_KEY);
     if (!stored) return [];
-    
-    try {
-      return JSON.parse(stored);
-    } catch {
-      return [];
-    }
+
   }
 
   private savePendingChanges(): void {
