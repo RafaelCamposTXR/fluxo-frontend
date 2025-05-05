@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from './base-http.service';
-import { Task, TaskFilter, MoveTask, PatchTask } from '../models/task.model';
+import { Task, CreateTask, TaskFilter, MoveTask, PatchTask } from '../models/task.model';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class TaskService extends BaseHttpService {
     return this.post<Task[]>('tarefas/ver-tarefas', filter);
   }
 
-  createTask(task: Task): Observable<Task> {
+  createTask(task: CreateTask): Observable<Task> {
     return this.post<Task>('tarefas/create-tarefas', task);
   }
 

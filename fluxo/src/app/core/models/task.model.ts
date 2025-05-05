@@ -11,6 +11,17 @@ export interface Task {
     prioridade?: PrioridadeTarefaEnum | undefined;
 }
 
+export interface CreateTask {
+    nome: string;
+    descricao?: string;
+    status: StatusTarefaEnum;
+    prioridade?: PrioridadeTarefaEnum | undefined;
+    responsavel?: string;
+    data_vencimento?: string;
+    tags?: string[];
+    dependencias?: string[];
+}
+
 export interface TaskFilter {
     status?: string;
     data_inicio?: string;

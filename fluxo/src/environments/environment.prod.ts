@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  FLUXO_BACK_END: 'http://192.168.50.36'
+  FLUXO_BACK_END: 'http://localhost:8000'
 };

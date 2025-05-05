@@ -13,3 +13,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+// Necessário para o modal-criar-tarefa funcionar!!!
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
