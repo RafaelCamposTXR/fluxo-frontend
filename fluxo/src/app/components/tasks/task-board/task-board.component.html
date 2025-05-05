@@ -10,7 +10,7 @@
       #column1
       [title]="'A Fazer'"
       [tasks]="getTodoTasks()"
-      [type]="'todo'"
+      [type]="StatusTarefaEnum.a_fazer"
       (moveTaskEvent)="moveTask($event.task, $event.status)">
     </app-task-column>
 
@@ -18,7 +18,7 @@
       #column2
       [title]="'Em Execução'"
       [tasks]="getDoingTasks()"
-      [type]="'doing'"
+      [type]="StatusTarefaEnum.em_progresso"
       (moveTaskEvent)="moveTask($event.task, $event.status)">
     </app-task-column>
 
@@ -26,7 +26,7 @@
       #column3
       [title]="'Concluídas'"
       [tasks]="getDoneTasks()"
-      [type]="'done'"
+      [type]="StatusTarefaEnum.concluida"
       (moveTaskEvent)="moveTask($event.task, $event.status)">
     </app-task-column>
   </div>

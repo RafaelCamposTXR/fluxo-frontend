@@ -1,10 +1,11 @@
 import { PrioridadeTarefaEnum } from '@shared/enums/prioridade-tarefa.enum';
+import { StatusTarefaEnum } from '@shared/enums/status-tarefa.enum';
 
 export interface Task {
     id: number;
     nome: string;
     descricao?: string;
-    status: string;
+    status: StatusTarefaEnum;
     data_criacao?: string;
     data_conclusao?: string;
     prioridade: PrioridadeTarefaEnum;

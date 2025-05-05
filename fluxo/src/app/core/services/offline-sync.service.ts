@@ -5,12 +5,13 @@ import { Task } from '../models/task.model';
 import { TaskService } from './task.service';
 import { ToasterService } from '@shared/services/toaster.service';
 import { LoadingService } from '@shared/services/loading.service';
+import {StatusTarefaEnum} from "@shared/enums/status-tarefa.enum";
 
 interface PendingChange {
   id: number;
   taskId: number;
   taskName: string;
-  newStatus: 'todo' | 'doing' | 'done';
+  newStatus: StatusTarefaEnum;
   timestamp: number;
   retryCount: number;
 }
@@ -60,7 +61,7 @@ export class OfflineSyncService {
   }
 
   // Adiciona uma mudança à fila de sincronização
-  addPendingChange(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
+  addPendingChange(task: Task, newStatus: StatusTarefaEnum): void {
     const changes = this.pendingChanges.value;
 
     // Remove mudança anterior da mesma tarefa se existir

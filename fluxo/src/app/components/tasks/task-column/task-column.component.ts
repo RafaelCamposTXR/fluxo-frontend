@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PrioridadeTarefaEnum } from '@shared/enums/prioridade-tarefa.enum';
 import { Task } from '@core/models/task.model';
+import {StatusTarefaEnum} from "@shared/enums/status-tarefa.enum";
 
 @Component({
   selector: 'app-task-column',
@@ -10,8 +11,8 @@ import { Task } from '@core/models/task.model';
 export class TaskColumnComponent {
   @Input() title: string = '';
   @Input() tasks: Task[] = [];
-  @Input() type: 'todo' | 'doing' | 'done' = 'todo';
-  @Output() moveTaskEvent = new EventEmitter<{task: Task, status: 'todo' | 'doing' | 'done'}>();
+  @Input() type: StatusTarefaEnum | undefined;
+  @Output() moveTaskEvent = new EventEmitter<{task: Task, status: StatusTarefaEnum}>();
 
   completedTaskIds: Set<number> = new Set();
   statusChangedTaskIds: Set<number> = new Set();
@@ -20,7 +21,7 @@ export class TaskColumnComponent {
     return `${priority}`;
   }
 
-  moveTask(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
+  moveTask(task: Task, newStatus: StatusTarefaEnum): void {
     // Adiciona o efeito de mudança de status
     this.statusChangedTaskIds.add(task.id);
     setTimeout(() => {
@@ -28,7 +29,7 @@ export class TaskColumnComponent {
     }, 400); // Duração da animação de pulso
 
     // Se for movido para 'done', adiciona o efeito de conclusão
-    if (newStatus === 'done') {
+    if (newStatus === StatusTarefaEnum.concluida) {
       this.completedTaskIds.add(task.id);
       setTimeout(() => {
         this.completedTaskIds.delete(task.id);
@@ -43,15 +44,17 @@ export class TaskColumnComponent {
 
   getTaskClasses(task: Task): string {
     const classes = [`${task.prioridade}`];
-    
+
     if (this.completedTaskIds.has(task.id)) {
       classes.push('entering-done');
     }
-    
+
     if (this.statusChangedTaskIds.has(task.id)) {
       classes.push('status-changed');
     }
-    
+
     return classes.join(' ');
   }
+
+  protected readonly StatusTarefaEnum = StatusTarefaEnum;
 }

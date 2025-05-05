@@ -12,13 +12,13 @@
         <span class="priority" [ngClass]="getPriorityClass(task.prioridade)">{{ task.prioridade }}</span>
         <div class="actions">
           <ng-container [ngSwitch]="type">
-            <button *ngSwitchCase="'todo'" (click)="moveTask(task, 'doing')">
+            <button *ngSwitchCase="StatusTarefaEnum.a_fazer" (click)="moveTask(task, StatusTarefaEnum.em_progresso)">
               Iniciar
             </button>
-            <button *ngSwitchCase="'doing'" (click)="moveTask(task, 'done')">
+            <button *ngSwitchCase="StatusTarefaEnum.em_progresso" (click)="moveTask(task, StatusTarefaEnum.concluida)">
               Concluir
             </button>
-            <button *ngSwitchCase="'done'" (click)="moveTask(task, 'todo')">
+            <button *ngSwitchCase="StatusTarefaEnum.concluida" (click)="moveTask(task, StatusTarefaEnum.a_fazer)">
               Reabrir
             </button>
           </ng-container>
