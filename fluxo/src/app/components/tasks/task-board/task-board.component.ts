@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { PrioridadeTarefaEnum } from '../../../shared/enums/prioridade-tarefa.enum';
 import { TaskService } from '../../../core/services/task.service';
 import { Task } from '../../../core/models/task.model';
 import { ToasterService } from '../../../shared/services/toaster.service';
 import { LoadingService } from '../../../shared/services/loading.service';
 import { OfflineSyncService } from '../../../core/services/offline-sync.service';
+import { AlertWebsocketService } from '../../../shared/services/alert-websocket.service';
+import { Subscription } from 'rxjs';
 import confetti from 'canvas-confetti';
 import {StatusTarefaEnum} from "@shared/enums/status-tarefa.enum";
 
@@ -13,20 +15,37 @@ import {StatusTarefaEnum} from "@shared/enums/status-tarefa.enum";
   templateUrl: './task-board.component.html',
   styleUrls: ['./task-board.component.scss']
 })
-export class TaskBoardComponent implements OnInit {
+export class TaskBoardComponent implements OnInit, OnDestroy {
   @Input() boardName: string = '';
   tasks: Task[] = [];
-
+  private alertSubscription!: Subscription;
 
   constructor(
     private taskService: TaskService,
     private toasterService: ToasterService,
     private loadingService: LoadingService,
-    private offlineSyncService: OfflineSyncService
+    private offlineSyncService: OfflineSyncService,
+    private alertWebsocketService: AlertWebsocketService
   ) {}
 
   ngOnInit() {
     this.loadTasks();
+    this.subscribeToAlerts();
+  }
+
+  ngOnDestroy() {
+    if (this.alertSubscription) {
+      this.alertSubscription.unsubscribe();
+    }
+  }
+
+  private subscribeToAlerts() {
+    this.alertSubscription = this.alertWebsocketService.getAlerts().subscribe(
+      (message) => {
+        this.toasterService.show(message, 'info');
+        this.loadTasks(); // Recarrega as tarefas quando receber um alerta
+      }
+    );
   }
 
   loadTasks() {
@@ -85,6 +104,10 @@ export class TaskBoardComponent implements OnInit {
         if (this.tasks[taskIndex]?.id === serverTask.id) {
           this.tasks[taskIndex] = serverTask;
         }
+        // Envia alerta via WebSocket
+        this.alertWebsocketService.sendAlert(
+          `Tarefa "${task.nome}" foi movida para ${this.getStatusLabel(newStatus)}`
+        );
       },
       error => {
         // Reverte para o estado original em caso de erro
@@ -96,6 +119,19 @@ export class TaskBoardComponent implements OnInit {
         this.offlineSyncService.addPendingChange(originalTask, newStatus);
       }
     );
+  }
+
+  private getStatusLabel(status: StatusTarefaEnum): string {
+    switch (status) {
+      case StatusTarefaEnum.a_fazer:
+        return 'A Fazer';
+      case StatusTarefaEnum.em_progresso:
+        return 'Em Progresso';
+      case StatusTarefaEnum.concluida:
+        return 'Concluída';
+      default:
+        return status;
+    }
   }
 
   private triggerSuccessAnimation(): void {
