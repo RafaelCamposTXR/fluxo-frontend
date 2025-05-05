@@ -8,14 +8,14 @@ export interface Task {
     status: StatusTarefaEnum;
     data_criacao?: string;
     data_conclusao?: string;
-    prioridade: PrioridadeTarefaEnum;
+    prioridade?: PrioridadeTarefaEnum | undefined;
 }
 
 export interface TaskFilter {
     status?: string;
     data_inicio?: string;
     data_fim?: string;
-    prioridade?: PrioridadeTarefaEnum;
+    prioridade?: PrioridadeTarefaEnum | undefined;
 }
 
 export interface MoveTask {
@@ -27,6 +27,6 @@ export interface PatchTask {
     nome?: string;
     descricao?: string;
     status?: string;
-    prioridade?: PrioridadeTarefaEnum;
+    prioridade?: PrioridadeTarefaEnum | undefined;
     data_conclusao?: string;
 }

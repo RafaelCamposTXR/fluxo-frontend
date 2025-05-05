@@ -17,8 +17,8 @@ export class TaskColumnComponent {
   completedTaskIds: Set<number> = new Set();
   statusChangedTaskIds: Set<number> = new Set();
 
-  getPriorityClass(priority: PrioridadeTarefaEnum): string {
-    return `${priority}`;
+  getPriorityClass(priority: PrioridadeTarefaEnum | undefined): string {
+    return priority ? `${priority}` : '';
   }
 
   moveTask(task: Task, newStatus: StatusTarefaEnum): void {

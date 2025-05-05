@@ -30,10 +30,10 @@ export class TaskBoardComponent implements OnInit {
   }
 
   loadTasks() {
-    debugger;
-    this.taskService.getTasks({}).subscribe(
+    this.taskService.getTasks({
+      prioridade: undefined
+    }).subscribe(
       (tasks: Task[]) => {
-        debugger;
         this.tasks = tasks;
       },
       error => {
@@ -43,42 +43,56 @@ export class TaskBoardComponent implements OnInit {
   }
 
   getTodoTasks(): Task[] {
-    return this.tasks.filter(task => task.status === StatusTarefaEnum.a_fazer);
+    return this.tasks.filter(task => task && task.status === StatusTarefaEnum.a_fazer);
   }
 
   getDoingTasks(): Task[] {
-    return this.tasks.filter(task => task.status === StatusTarefaEnum.em_progresso);
+    return this.tasks.filter(task => task && task.status === StatusTarefaEnum.em_progresso);
   }
 
   getDoneTasks(): Task[] {
-    return this.tasks.filter(task => task.status === StatusTarefaEnum.concluida);
+    return this.tasks.filter(task => task && task.status === StatusTarefaEnum.concluida);
   }
 
   moveTask(task: Task, newStatus: StatusTarefaEnum): void {
-    debugger;
-    const taskIndex = this.tasks.findIndex(t => t.id === task.id);
+    if (!task || !task.id) return;
+
+    const taskIndex = this.tasks.findIndex(t => t && t.id === task.id);
     if (taskIndex === -1) return;
 
-    const originalTask = { ...task };
-    const updatedTask = { ...task, status: newStatus };
+    // Cria uma cópia da tarefa original antes de qualquer modificação
+    const originalTask = { ...this.tasks[taskIndex] };
+    
+    // Atualiza localmente (otimistic update)
+    const updatedTask: Task = {
+      ...originalTask,
+      status: newStatus
+    };
     this.tasks[taskIndex] = updatedTask;
 
-    if (newStatus === StatusTarefaEnum.concluida && task.status !== StatusTarefaEnum.concluida) {
+    // Dispara animação se necessário
+    if (newStatus === StatusTarefaEnum.concluida && originalTask.status !== StatusTarefaEnum.concluida) {
       this.triggerSuccessAnimation();
     }
 
+    // Envia para o servidor
     this.taskService.moveTask({
       tarefa: task.nome,
       novo_status: newStatus
     }).subscribe(
-
       (serverTask: Task) => {
-        this.tasks[taskIndex] = serverTask;
+        // Atualiza com os dados do servidor
+        if (this.tasks[taskIndex]?.id === serverTask.id) {
+          this.tasks[taskIndex] = serverTask;
+        }
       },
       error => {
+        // Reverte para o estado original em caso de erro
+        if (this.tasks[taskIndex]?.id === originalTask.id) {
+          this.tasks[taskIndex] = originalTask;
+        }
+        
         this.toasterService.show('Sem notícias do servidor. Te avisamos assim que a conexão voltar.', 'warning');
-
-        // Adiciona à fila de sincronização
         this.offlineSyncService.addPendingChange(originalTask, newStatus);
       }
     );
