@@ -111,8 +111,8 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
         throw error; // Re-throw para ser tratado no subscribe
       }),
       finalize(() => {
-        loadingTimer.unsubscribe(); // Cancela o timer do loading
-        this.loadingService.hide();
+        loadingTimer.unsubscribe(); // Cancela apenas o timer do loading inicial
+        // O hide será controlado pelo serviço de sync
       })
     ).subscribe({
       next: (serverTask: Task) => {
@@ -124,11 +124,13 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
         this.alertWebsocketService.sendAlert(
           `Tarefa "${task.nome}" foi movida para ${this.getStatusLabel(newStatus)}`
         );
+        this.loadingService.hide(); // Esconde loading apenas em caso de sucesso
       },
       error: error => {
         // Mantém a alteração local e adiciona à fila de sincronização
         this.toasterService.show('Sem notícias do servidor. A alteração será sincronizada quando a conexão voltar.', 'warning');
         this.offlineSyncService.addPendingChange(updatedTask, newStatus);
+        // Não esconde o loading aqui, será escondido quando a sincronização ocorrer
       }
     });
   }
