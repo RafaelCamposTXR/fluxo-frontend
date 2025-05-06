@@ -8,7 +8,8 @@ export class ModalCriarTarefaService {
 
   open() {
     return this.dialog.open(ModalCriarTarefaComponent, {
-      width: '500px',
+      width: '60vw',
+      height: '80vh',
     });
   }
 }

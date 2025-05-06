@@ -1,10 +1,13 @@
+@import '../../styles/colors';
+
 .modal-criar-tarefa-container {
-    background: #fff;
+    background: $background;
     padding: 2rem;
     border-radius: 8px;
     min-width: 350px;
     max-width: 100%;
     box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    color: #fff;
   
     h2 {
       margin-bottom: 1.5rem;

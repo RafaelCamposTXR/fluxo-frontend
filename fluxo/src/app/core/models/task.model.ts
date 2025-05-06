@@ -32,17 +32,6 @@ export interface CreateTask {
     em_alarme?: boolean;
 }
 
-export interface CreateTask {
-    nome: string;
-    descricao?: string;
-    status: StatusTarefaEnum;
-    prioridade?: PrioridadeTarefaEnum | undefined;
-    responsavel?: string;
-    data_vencimento?: string;
-    tags?: string[];
-    dependencias?: string[];
-}
-
 export interface TaskFilter {
     ls_nome?: string[];
     ls_status?: StatusTarefaEnum[];
