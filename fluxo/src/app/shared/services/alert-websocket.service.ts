@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AlertWebsocketService {
 
   private initializeWebSocket() {
     try {
-      this.socket = new WebSocket("ws://192.168.15.5:8000/api/ws/alerta");
+      this.socket = new WebSocket(`${environment.FLUXO_BACK_END}/api/ws/alerta`);
 
       this.socket.onopen = () => {
         console.log('WebSocket connection established');
