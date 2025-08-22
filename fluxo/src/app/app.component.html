@@ -1,3 +1,6 @@
-
-<router-outlet></router-outlet>
-
+<app-header *ngIf="!isLoginRoute()"></app-header>
+<main>
+  <router-outlet></router-outlet>
+  <app-toaster></app-toaster>
+  <app-loading></app-loading>
+</main>

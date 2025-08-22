@@ -1,0 +1,22 @@
+<div class="login-page">
+  <div class="logo-container">
+    <img src="assets/images/fluxo_logo.png" alt="Logo Fluxo">
+  </div>
+
+  <div class="login-container">
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div>
+        <label for="username">Usuário:</label>
+        <input type="text" id="username" required [(ngModel)]="credentials.username" name="username">
+      </div>
+      <div>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" required [(ngModel)]="credentials.password" name="password">
+      </div>
+      <button type="submit">Login</button>
+      <div *ngIf="errorMessage" class="error">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+</div>

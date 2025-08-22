@@ -1,0 +1,29 @@
+<div class="board-column">
+  <div class="column-header" [ngClass]="type">
+  <h2>{{ title }}</h2>
+    <span class="task-count">{{ tasks.length }}</span>
+  </div>
+
+  <div class="tasks-container">
+    <div *ngFor="let task of tasks" class="task-card" [ngClass]="getTaskClasses(task)">
+      <h3>{{ task.nome }}</h3>
+      <p>{{ task.descricao }}</p>
+      <div class="task-footer">
+        <span class="priority" [ngClass]="getPriorityClass(task.prioridade)">{{ task.prioridade }}</span>
+        <div class="actions">
+          <ng-container [ngSwitch]="type">
+            <button *ngSwitchCase="StatusTarefaEnum.a_fazer" (click)="moveTask(task, StatusTarefaEnum.em_progresso)">
+              Iniciar
+            </button>
+            <button *ngSwitchCase="StatusTarefaEnum.em_progresso" (click)="moveTask(task, StatusTarefaEnum.concluida)">
+              Concluir
+            </button>
+            <button *ngSwitchCase="StatusTarefaEnum.concluida" (click)="moveTask(task, StatusTarefaEnum.a_fazer)">
+              Reabrir
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="modal-criar-tarefa-container">
+    <h2>Criar Nova Tarefa</h2>
+    <form [formGroup]="form" (ngSubmit)="enviar()">
+  
+      <div class="form-group">
+        <label for="nome">Nome da Tarefa</label>
+        <input id="nome" formControlName="nome" type="text" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" formControlName="descricao"></textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" formControlName="status" required>
+          <option value="">Selecione</option>
+          <option value="todo">A Fazer</option>
+          <option value="doing">Fazendo</option>
+          <option value="done">Feito</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="prioridade">Prioridade</label>
+        <select id="prioridade" formControlName="prioridade">
+          <option value="">Selecione</option>
+          <option value="baixa">Baixa</option>
+          <option value="média">Média</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="responsavel">Responsável</label>
+        <input id="responsavel" formControlName="responsavel" type="text" />
+      </div>
+  
+      <div class="form-group">
+        <label for="data_vencimento">Data de Vencimento</label>
+        <input id="data_vencimento" formControlName="data_vencimento" type="date" />
+      </div>
+  
+      <div class="form-group">
+        <label for="etiquetas">Etiquetas</label>
+        <input id="etiquetas" formControlName="etiquetas" type="text" placeholder="Separar por vírgula" />
+      </div>
+  
+      <div class="form-group">
+        <label for="dependencias">Dependências</label>
+        <input id="dependencias" formControlName="dependencias" type="text" placeholder="Separar por vírgula" />
+      </div>
+  
+      <div class="modal-actions">
+        <button type="button" (click)="fechar()">Cancelar</button>
+        <button type="submit" [disabled]="form.invalid">Criar Tarefa</button>
+      </div>
+    </form>
+  </div>

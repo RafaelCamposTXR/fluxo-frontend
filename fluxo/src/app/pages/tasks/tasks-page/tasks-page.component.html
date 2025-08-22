@@ -1,22 +1,6 @@
-<div class="tasks-container">
-  <h1>Lista de Tarefas</h1>
-
-  <div class="task-list">
-    <!-- Iteração sobre a lista de tarefas -->
-    <div class="task" *ngFor="let task of tasks">
-      <div class="task-details">
-        <h2>{{ task.title }}</h2>
-        <p>{{ task.description }}</p>
-        <p><strong>Data de Vencimento:</strong> {{ task.dueDate }}</p>
-        <p><strong>Status:</strong> {{ task.status }}</p>
-      </div>
-
-      <div class="task-actions">
-        <!-- Botão para alternar o status da tarefa -->
-        <button (click)="toggleTaskStatus(task.id)">
-          {{ task.status === 'concluída' ? 'Marcar como Pendente' : 'Marcar como Concluída' }}
-        </button>
-      </div>
-    </div>
+<div class="tasks-page">
+  <div class="tasks-container">
+    <app-task-board [boardName]="'Projeto Frontend'">
+    </app-task-board>
   </div>
 </div>
