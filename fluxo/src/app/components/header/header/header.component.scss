@@ -34,6 +34,17 @@
     }
   }
 
+  .logo-container {
+    width: 13rem;
+    display: flex;
+    justify-content: start;
+  }
+
+  .logo-img {
+    width: 100%;
+    height: auto;
+  }
+
   .actions {
     display: flex;
     gap: 0.5rem;
